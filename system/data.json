@@ -1,0 +1,72 @@
+{
+  "version": "1",
+  "items": [
+    {
+      "id": "-1",
+      "type": "Type",
+      "name": "Task"
+    },
+    {
+      "id": "1",
+      "type": "Task",
+      "todo": "2.1"
+    },
+    {
+      "id": "2",
+      "type": "Type",
+      "name": "Text"
+    },
+    {
+      "id": "2",
+      "__typename": "Task",
+      "todo": "Item 1"
+    },
+    {
+      "id": "3",
+      "__typename": "Task",
+      "todo": "Item 1"
+    },
+
+    {
+      "id": "4",
+      "__typename": "List",
+      "title": "List 1"
+    },
+    {
+      "id": "5",
+      "__typename": "Webpage",
+      "url": "Item 1"
+    },
+    {
+      "id": "6",
+      "__typename": "Topic",
+      "name": "Item 1"
+    },
+    {
+      "id": "6",
+      "__typename": "Topic",
+      "name": "Item 1"
+    },
+    {
+      "id": "7",
+      "__typename": "ItemType",
+      "name": "Book"
+    },
+    {
+      "id": "8",
+      "__typename": "ItemType",
+      "name": "Webpage"
+    },
+    {
+      "id": "8",
+      "__typename": "Type",
+      "name": "Webpage"
+    }
+  ],
+  "references": [
+    ["4", "1"],
+    ["4", "2"],
+    ["4", "3"],
+    ["3", "5"]
+  ]
+}

@@ -1,0 +1,89 @@
+interface Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): References!
+  referencedBy(type: ItemType, first: Int, after: String): References!
+  type: ItemType!
+  metadata: String
+}
+
+type References {
+  references: [Reference!]!
+  pageInfo: PageInfo!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+}
+
+type Reference {
+  cursor: String!
+  item: Item!
+}
+
+type Query {
+  item(id: ID!): Item
+  items(type: ItemType, first: Int, after: String): References!
+}
+
+type Text implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): References!
+  referencedBy(type: ItemType, first: Int, after: String): References!
+  type: ItemType!
+  metadata: String
+  text: String
+}
+
+type Title implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): References!
+  referencedBy(type: ItemType, first: Int, after: String): References!
+  type: ItemType!
+  metadata: String
+  title: String
+}
+
+type Topic implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): References!
+  referencedBy(type: ItemType, first: Int, after: String): References!
+  type: ItemType!
+  metadata: String
+  topicType: String
+  text: String
+}
+
+type Task implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): References!
+  referencedBy(type: ItemType, first: Int, after: String): References!
+  type: ItemType!
+  metadata: String
+}
+
+type List implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): References!
+  referencedBy(type: ItemType, first: Int, after: String): References!
+  type: ItemType!
+  metadata: String
+  title: String
+}
+
+type Note implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): References!
+  referencedBy(type: ItemType, first: Int, after: String): References!
+  type: ItemType!
+  metadata: String
+  title: String
+}
+
+enum ItemType {
+  Text
+  Title
+  Topic
+  Task
+  List
+  Note
+}

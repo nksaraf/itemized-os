@@ -1,0 +1,217 @@
+interface Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+}
+
+type System implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+  name: String
+}
+
+input SystemInput {
+  id: String
+  name: String
+}
+
+type Type implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+  name: String
+}
+
+input TypeInput {
+  id: String
+  name: String
+}
+
+type Text implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+  value: String
+}
+
+input TextInput {
+  id: String
+  value: String
+}
+
+type Date implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+}
+
+input DateInput {
+  id: String
+}
+
+type Title implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+}
+
+input TitleInput {
+  id: String
+}
+
+type Topic implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+}
+
+input TopicInput {
+  id: String
+}
+
+type Task implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+}
+
+input TaskInput {
+  id: String
+}
+
+type List implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+}
+
+input ListInput {
+  id: String
+}
+
+type Webpage implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+}
+
+input WebpageInput {
+  id: String
+}
+
+type Note implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+}
+
+input NoteInput {
+  id: String
+}
+
+type Status implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+}
+
+input StatusInput {
+  id: String
+}
+
+type Book implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+}
+
+input BookInput {
+  id: String
+}
+
+type Movie implements Item {
+  id: ID!
+  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
+  types: [ItemType!]
+  metadata: String
+}
+
+input MovieInput {
+  id: String
+}
+
+enum ItemType {
+  System
+  Type
+  Text
+  Date
+  Title
+  Topic
+  Task
+  List
+  Webpage
+  Note
+  Status
+  Book
+  Movie
+}
+
+type ReferencesPage {
+  page: [Reference!]!
+  pageInfo: PageInfo!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+}
+
+type Reference {
+  cursor: String!
+  item: Item!
+}
+
+type Query {
+  item(id: ID!): Item
+  items(type: ItemType, first: Int, after: String): ReferencesPage!
+  systems(first: Int, after: String): ReferencesPage!
+  types(first: Int, after: String): ReferencesPage!
+  texts(first: Int, after: String): ReferencesPage!
+  dates(first: Int, after: String): ReferencesPage!
+  titles(first: Int, after: String): ReferencesPage!
+  topics(first: Int, after: String): ReferencesPage!
+  tasks(first: Int, after: String): ReferencesPage!
+  lists(first: Int, after: String): ReferencesPage!
+  webpages(first: Int, after: String): ReferencesPage!
+  notes(first: Int, after: String): ReferencesPage!
+  statuses(first: Int, after: String): ReferencesPage!
+  books(first: Int, after: String): ReferencesPage!
+  movies(first: Int, after: String): ReferencesPage!
+}
