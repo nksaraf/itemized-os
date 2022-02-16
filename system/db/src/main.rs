@@ -323,6 +323,23 @@ impl OS {
         // .(|e| e.key.inbound_id)
         // .collect();
     }
+    pub fn get_referenced_by(&mut self, a: String) -> Vec<JsValue> {
+        return self
+            .store
+            .get_edges(
+                SpecificVertexQuery::new(vec![
+                    uuid::Uuid::parse_str(&a).expect("Expected to be able to parse UUID")
+                ])
+                .inbound() // uuid::Uuid::parse_str(&a).expect("Expected to be able to parse UUID"),
+                .into(),
+            )
+            .expect("Expected to be able to get the edge count")
+            .into_iter()
+            .map(|e| e.key.outbound_id.to_simple().to_string().into())
+            .collect();
+        // .(|e| e.key.inbound_id)
+        // .collect();
+    }
 }
 // Called when the wasm module is instantiated
 #[wasm_bindgen(start)]

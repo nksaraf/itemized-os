@@ -23,6 +23,36 @@ let os = OS.new();
 //   references: [] as [number, number][],
 // };
 
+function getReferences(id: any, args: { type: string }) {
+  const references = os
+    .get_references(id)
+    .filter((id) =>
+      args?.type ? os.get_item_types(id).includes(args.type) : true
+    )
+    .map((id: any) => ({
+      cursor: id,
+    }));
+
+  return {
+    page: references,
+  };
+}
+
+function getReferencenedBy(id: any, args: { type: string }) {
+  const references = os
+    .get_referenced_by(id)
+    .filter((id) =>
+      args?.type ? os.get_item_types(id).includes(args.type) : true
+    )
+    .map((id: any) => ({
+      cursor: id,
+    }));
+
+  return {
+    page: references,
+  };
+}
+
 const builder = () => {
   let itemInterface = `
   id: ID!
@@ -269,46 +299,6 @@ os.add_edge(title, text);
 os.add_edge(harryPotter1, title);
 os.set_property(text, "value", `"Harry Potter"`);
 console.log(os.get_properties(text));
-// addReference(
-//   title.id,
-//   addItem(Text.id, {
-//     value: "Harry Potter",
-//   }).id
-// );
-// // addReference(harryPotter.id, title.id);
-
-// title = addItem(Title.id, {});
-// addReference(
-//   title.id,
-//   addItem(Text.id, {
-//     value: "Harry Potter and the Socerer's Stone",
-//   }).id
-// );
-
-// addReference(harryPotter1.id, title.id);
-os.add_edge(Movie, harryPotter1);
-
-// const resolvers = {
-//   Todo: {
-//     type: () => "Todo",
-//     renferencedItems: getRefeferences,
-//   },
-//   List: {
-//     type: () => "List",
-//     renferencedItems: getRefeferences,
-//   },
-//   Query: {
-//     item: () => `Hello World!`,
-//     items: (ctx: any) => {
-//       return {
-//         references: Object.entries(data["items"]).map(([_, item]: any) => ({
-//           cursor: item.id,
-//           item: item,
-//         })),
-//       };
-//     },
-//   },
-// };
 
 const schema = schemaBuilder.toSchema();
 
@@ -322,6 +312,7 @@ const s = new Server({
       const res = new Response(null, {});
       res.headers.set("Access-Control-Allow-Origin", "*");
       res.headers.set("Access-Control-Allow-Headers", "Content-Type");
+      res.headers.set("Access-Control-Allow-Private-Network", "true");
       console.log([...res.headers.entries()]);
       return res;
     }
@@ -338,11 +329,17 @@ const s = new Server({
 
               graphiql: false,
             })(req)
-        : new Response(`Hello World!`);
+        : new Response(null, {
+            status: 302,
+            headers: {
+              Location: "/graphql",
+            },
+          });
 
     const headers = new Headers(res.headers);
     headers.set("Access-Control-Allow-Origin", "*");
     headers.set("Access-Control-Allow-Headers", "Content-Type");
+    headers.set("Access-Control-Allow-Private-Network", "true");
 
     return new Response(res.body, {
       headers,
@@ -353,31 +350,3 @@ const s = new Server({
 });
 
 s.listenAndServe();
-
-function getReferences(id: any, args: { type: string }) {
-  const references = os
-    .get_references(id)
-    .filter((id) =>
-      args?.type ? os.get_item_types(id).includes(args.type) : true
-    )
-    .map((id: any) => ({
-      cursor: id,
-    }));
-
-  return {
-    page: references,
-  };
-}
-
-function getReferencenedBy(id: any, args: { type: string }) {
-  // const references = data["references"]
-  //   .filter(([a, b]: any) => b === id)
-  //   .map(([id, _]: any) => ({
-  //     cursor: id,
-  //     item: data["items"][id],
-  //   }));
-
-  return {
-    page: [],
-  };
-}
