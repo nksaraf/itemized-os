@@ -136,12 +136,6 @@ const u32CvtShim = new Uint32Array(2);
 
 const uint64CvtShim = new BigUint64Array(u32CvtShim.buffer);
 /**
-*/
-export function main() {
-    wasm.main();
-}
-
-/**
 * @param {number} a
 * @param {number} b
 * @returns {number}
@@ -492,7 +486,7 @@ async function init(input) {
 
     wasm = instance.exports;
     init.__wbindgen_wasm_module = module;
-    wasm.__wbindgen_start();
+
     return wasm;
 }
 

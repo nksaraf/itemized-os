@@ -4,9 +4,6 @@
 */
 export function init_panic_hook(): void;
 /**
-*/
-export function main(): void;
-/**
 * @param {number} a
 * @param {number} b
 * @returns {number}
@@ -104,13 +101,11 @@ export interface InitOutput {
   readonly os_set_property: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => void;
   readonly os_get_references: (a: number, b: number, c: number, d: number) => void;
   readonly os_get_referenced_by: (a: number, b: number, c: number, d: number) => void;
-  readonly main: () => void;
   readonly add: (a: number, b: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_free: (a: number, b: number) => void;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
-  readonly __wbindgen_start: () => void;
 }
 
 /**

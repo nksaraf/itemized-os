@@ -341,52 +341,86 @@ impl OS {
         // .collect();
     }
 }
-// Called when the wasm module is instantiated
-#[wasm_bindgen(start)]
-pub fn main() -> StdResult<(), JsValue> {
-    init_panic_hook();
-    let store = MemoryDatastore::default();
+// // Called when the wasm module is instantiated
+// #[wasm_bindgen(start)]
+// pub fn wasm_main() -> StdResult<(), JsValue> {
+//     init_panic_hook();
+//     let store = MemoryDatastore::default();
 
-    // store.create_vertex_from_type(t: Identifier::new((): ));
+//     // store.create_vertex_from_type(t: Identifier::new((): ));
 
-    let vertex1 = &Vertex::new(indradb::Identifier::default());
-    let vertex2 = &Vertex::new(indradb::Identifier::default());
-    store
-        .create_vertex(vertex1)
-        .expect("Expected to be able to create a vertex");
-    store
-        .create_vertex(vertex2)
-        .expect("Expected to be able to create a vertex");
+//     let vertex1 = &Vertex::new(indradb::Identifier::default());
+//     let vertex2 = &Vertex::new(indradb::Identifier::default());
+//     store
+//         .create_vertex(vertex1)
+//         .expect("Expected to be able to create a vertex");
+//     store
+//         .create_vertex(vertex2)
+//         .expect("Expected to be able to create a vertex");
 
-    store
-        .create_edge(&EdgeKey::new(
-            vertex1.id,
-            indradb::Identifier::default(),
-            vertex2.id,
-        ))
-        .expect("Expected to be able to create a vertex");
+//     store
+//         .create_edge(&EdgeKey::new(
+//             vertex1.id,
+//             indradb::Identifier::default(),
+//             vertex2.id,
+//         ))
+//         .expect("Expected to be able to create a vertex");
 
-    let vertex_count = store
-        .get_vertex_count()
-        .expect("Expected to be able to get the vertex count");
+//     let vertex_count = store
+//         .get_vertex_count()
+//         .expect("Expected to be able to get the vertex count");
 
-    // Use `web_sys`'s global `window` function to get a handle on the global
-    // window object.
-    // let window = web_sys::window().expect("no global `window` exists");
-    // let document = window.document().expect("should have a document on window");
-    // let body = document.body().expect("document should have a body");
-    web_sys::console::log_2(&"Hello using web-sys".into(), &vertex_count.into());
+//     // Use `web_sys`'s global `window` function to get a handle on the global
+//     // window object.
+//     // let window = web_sys::window().expect("no global `window` exists");
+//     // let document = window.document().expect("should have a document on window");
+//     // let body = document.body().expect("document should have a body");
+//     web_sys::console::log_2(&"Hello using web-sys".into(), &vertex_count.into());
 
-    // Manufacture the element we're gonna append
-    // let val = document.create_element("p")?;
-    // val.set_inner_html("Hello from Rust!");
+//     // Manufacture the element we're gonna append
+//     // let val = document.create_element("p")?;
+//     // val.set_inner_html("Hello from Rust!");
 
-    // body.append_child(&val)?;
+//     // body.append_child(&val)?;
 
-    Ok(())
-}
+//     Ok(())
+// }
 
 #[wasm_bindgen]
 pub fn add(a: u32, b: u32) -> u32 {
     a + b
 }
+
+pub fn main() {
+
+}
+
+// pub fn main() -> wry::Result<()> {
+//     use wry::{
+//         application::{
+//             event::{Event, StartCause, WindowEvent},
+//             event_loop::{ControlFlow, EventLoop},
+//             window::WindowBuilder,
+//         },
+//         webview::WebViewBuilder,
+//     };
+//     let event_loop = EventLoop::new();
+//     let window = WindowBuilder::new()
+//         .with_title("Hello World")
+//         .build(&event_loop)?;
+//     let _webview = WebViewBuilder::new(window)?
+//         .with_url("https://tauri.studio")?
+//         .build()?;
+//     event_loop.run(move |event, _, control_flow| {
+//         *control_flow = ControlFlow::Wait;
+
+//         match event {
+//             Event::NewEvents(StartCause::Init) => println!("Wry has started!"),
+//             Event::WindowEvent {
+//                 event: WindowEvent::CloseRequested,
+//                 ..
+//             } => *control_flow = ControlFlow::Exit,
+//             _ => (),
+//         }
+//     });
+// }

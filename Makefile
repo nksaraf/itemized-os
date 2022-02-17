@@ -1,6 +1,6 @@
 
-build-db: ./system/db/src
-	cd system/db && wasm-pack build --target web
+build-db: ./db/src
+	cd db && wasm-pack build --target web --out-dir ../system/os
 
 graphql-api: build-db
-	deno run -A --watch system/graphql_api.ts
+	deno run -A --watch system/main.ts
