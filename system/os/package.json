@@ -1,0 +1,21 @@
+{
+  "name": "alexandria",
+  "description": "A personal operating system",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/indradb/indradb"
+  },
+  "files": [
+    "indradb_bg.wasm",
+    "indradb.js",
+    "indradb.d.ts"
+  ],
+  "module": "indradb.js",
+  "types": "indradb.d.ts",
+  "sideEffects": false,
+  "keywords": [
+    "graph",
+    "database"
+  ]
+}
