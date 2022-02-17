@@ -14,6 +14,7 @@
     "schema": "./system/schema.graphql"
   },
   "dependencies": {
+    "@dnd-kit/core": "^5.0.1",
     "@magiql/ide": "^0.0.31",
     "@pothos/core": "^3.2.0",
     "@raycast/api": "^1.28.0",
@@ -32,8 +33,10 @@
     "graphql-tools": "^8.2.0",
     "hash-sum": "^2.0.0",
     "isomorphic-unfetch": "^3.1.0",
+    "pluralize": "^8.0.0",
     "pm2": "^5.1.2",
     "react": "^17.0.2",
+    "react-digraph": "^8.0.0-beta.7",
     "react-dom": "^17.0.2",
     "react-query": "npm:@nksaraf/react-query@^3.0.2",
     "react-relay-network-modern": "^6.2.1",

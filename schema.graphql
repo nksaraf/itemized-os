@@ -1,6 +1,6 @@
 interface Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -8,7 +8,7 @@ interface Item {
 
 type System implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -22,7 +22,7 @@ input SystemInput {
 
 type Type implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -36,7 +36,7 @@ input TypeInput {
 
 type Text implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -50,7 +50,7 @@ input TextInput {
 
 type Date implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -62,7 +62,7 @@ input DateInput {
 
 type Title implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -74,7 +74,7 @@ input TitleInput {
 
 type Topic implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -86,7 +86,7 @@ input TopicInput {
 
 type Task implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -98,7 +98,7 @@ input TaskInput {
 
 type List implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -110,7 +110,7 @@ input ListInput {
 
 type Webpage implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -122,7 +122,7 @@ input WebpageInput {
 
 type Note implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -134,7 +134,7 @@ input NoteInput {
 
 type Status implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -146,7 +146,7 @@ input StatusInput {
 
 type Book implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String
@@ -158,7 +158,7 @@ input BookInput {
 
 type Movie implements Item {
   id: ID!
-  renferencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
+  referencedItems(type: ItemType, first: Int, after: String): ReferencesPage!
   referencedBy(type: ItemType, first: Int, after: String): ReferencesPage!
   types: [ItemType!]
   metadata: String

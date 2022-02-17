@@ -5,6 +5,7 @@ export const graphql: (
   strings: TemplateStringsArray,
   ...values: (GraphQLTaggedNode | string)[]
 ) => GraphQLTaggedNode | string = (strings, ...fragmentsOrValues) => {
+  console.log(strings, fragmentsOrValues);
   let rawGraphQL = "";
   let embedFrags = "";
   strings.forEach((string, i) => {
@@ -31,6 +32,7 @@ export const graphql: (
   });
 
   const graphqlDoc = rawGraphQL + " " + embedFrags;
+  console.log(graphqlDoc);
 
   return parseGraphQLTag(graphqlDoc);
 };

@@ -9,7 +9,7 @@ module.exports = {
   apps: [
     {
       name: "Remix",
-      script: "yarn vite",
+      script: "yarn vite --port 7777",
       ignore_watch: ["."],
       env: {
         ...result.parsed,
