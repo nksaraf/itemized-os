@@ -271,7 +271,7 @@ os.add_edge(taskList, title);
 
 const schema = schemaBuilder.toSchema();
 
-Deno.writeTextFileSync("./schema.graphql", printSchema(schema));
+// Deno.writeTextFileSync("./schema.graphql", printSchema(schema));
 
 async function respondWithGraphQL(req: Request) {
   const query = await req.json();
