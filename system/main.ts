@@ -1,4 +1,5 @@
-import { createClient } from "./deps.js";
+import { createClient } from "https://esm.sh/@supabase/supabase-js";
+
 // Get the connection string from the environment variable "DATABASE_URL"
 // const databaseUrl = Deno.env.get("DATABASE_URL")!;
 // const pool = new postgres.Pool(`postgres://postgres:8f187cbf0264f6d480127cfe36bc0828f966a157637fc9f0@alexandria-db.internal:5432/postgres`, 3, true);
@@ -13,6 +14,12 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
 /**
  */
 interface OS {
+  free(): void;
+
+  /**
+   * @returns {string}
+   */
+  add_vertex(): Promise<string>;
   /**
    * @returns {any[]}
    */
@@ -65,26 +72,51 @@ interface OS {
    * @param {string} a
    * @returns {any[]}
    */
-  get_references(a: string): Promise<string[]>[];
+  get_references(a: string): Promise<any>[];
   /**
    * @param {string} a
    * @returns {any[]}
    */
-  get_referenced_by(a: string): Promise<string[]>[];
+  get_referenced_by(a: string): Promise<any>[];
 }
 
 import { serve } from "https://deno.land/std@0.126.0/http/server.ts";
 import { makeExecutableSchema } from "https://deno.land/x/graphql_tools@0.0.2/mod.ts";
 import { gql } from "https://deno.land/x/graphql_tag@0.0.1/mod.ts";
 import renderPlayground from "https://esm.sh/@magiql/ide/render";
-import { graphql } from "https://deno.land/x/graphql_deno@v15.0.0/mod.ts";
+import {
+  printSchema,
+  graphql,
+} from "https://deno.land/x/graphql_deno@v15.0.0/mod.ts";
 import pluralize from "https://esm.sh/pluralize";
 
 // import type  { OS } from "./os/indradb.js";
 
 // await init();
 export let os: OS = {
-  add_type: async (name: string) => {},
+  add_type: async (name: string) => {
+    const { data: systemType, errors } = await supabase
+      .from("items")
+      .insert([{ type: "Type" }]);
+
+    await supabase.from("item_properties").insert([
+      {
+        id: systemType[0].id,
+        name: "typeName",
+        value: name,
+      },
+    ]);
+
+    await supabase.from("references").insert([
+      {
+        outbound_id: "00000000-0000-0000-0000-000000000002",
+        inbound_id: systemType[0].id,
+        type: `Type`,
+      },
+    ]);
+
+    return systemType[0].id;
+  },
   add_item: async (name: string) => {},
   set_property: () => {},
   add_edge: () => {},
@@ -124,7 +156,7 @@ export let os: OS = {
       )
       .eq("type", "Type");
     let system = types.map(
-      (t) => t.item_properties.find((prop) => prop.name === "name").value
+      (t) => t.item_properties.find((prop) => prop.name === "typeName").value
     );
 
     if (system.length === 1 && system[0] === "System") {
@@ -154,6 +186,76 @@ export let os: OS = {
     return Object.fromEntries(
       item.item_properties.map((pr) => [pr.name, pr.value])
     );
+  },
+  setup: async () => {
+    console.log(
+      await supabase
+        .from("item_properties")
+        .delete()
+        .neq("id", "00000000-0000-0000-0000-000000000000")
+    );
+    console.log(
+      await supabase
+        .from("references")
+        .delete()
+        .neq("id", "00000000-0000-0000-0000-000000000000")
+    );
+    console.log(
+      await supabase
+        .from("items")
+        .delete()
+        .neq("id", "00000000-0000-0000-0000-000000000000")
+    );
+
+    const { data: systemType, errors } = await supabase.from("items").insert([
+      {
+        id: "00000000-0000-0000-0000-000000000001",
+        type: "Type",
+      },
+    ]);
+
+    await supabase.from("item_properties").insert([
+      {
+        id: systemType[0].id,
+        name: "typeName",
+        value: `System`,
+      },
+    ]);
+
+    await supabase.from("item_properties").insert([
+      {
+        id: "00000000-0000-0000-0000-000000000000",
+        name: "name",
+        value: `Bootloader`,
+      },
+    ]);
+
+    const { data: baseType, errors: baseErrors } = await supabase
+      .from("items")
+      .insert([
+        {
+          type: "Type",
+          id: "00000000-0000-0000-0000-000000000002",
+        },
+      ]);
+
+    await supabase.from("item_properties").insert([
+      {
+        id: baseType[0].id,
+        name: "typeName",
+        value: `Type`,
+      },
+    ]);
+
+    await supabase.from("references").insert([
+      {
+        outbound_id: systemType[0].id,
+        inbound_id: baseType[0].id,
+        type: `Type`,
+      },
+    ]);
+
+    return true;
   },
 };
 
@@ -228,7 +330,7 @@ const builder = (os: OS) => {
       `;
 
       itemTypes.push([type, fields, resolvers]);
-      return os.add_type(type);
+      // return os.add_type(type);
     },
     toSchema: () => {
       let typeDefs = `${internalTypeDefs} \n ${userTypeDefs} \n
@@ -268,6 +370,7 @@ const builder = (os: OS) => {
 
         type Mutation {
           addType(name: String): Type
+          setup(name: String): Boolean
         }
       `;
       const schema = makeExecutableSchema({
@@ -275,11 +378,14 @@ const builder = (os: OS) => {
         resolvers: {
           Mutation: {
             addType: async (root: any, args: any) => {
-              let id = os.add_type(args.name);
+              let id = await os.add_type(args.name);
               return {
                 id,
                 ...(await os.get_properties(id)),
               };
+            },
+            setup: () => {
+              return os.setup();
             },
           },
           Query: {
@@ -364,30 +470,30 @@ const builder = (os: OS) => {
       return schema;
     },
   };
-  api.addItemType("System", "name: String", {});
-  api.addItemType("Type", "name: String", {});
+  api.addItemType("System", "typeName: String", {});
+  api.addItemType("Type", "typeName: String", {});
   return api;
 };
 
 let schemaBuilder = builder(os);
 
-var Text = schemaBuilder.addItemType("Text", "value: String");
-var Date = schemaBuilder.addItemType("Date");
+// var Text = schemaBuilder.addItemType("Text", "value: String");
+// var Date = schemaBuilder.addItemType("Date");
 
-var Title = schemaBuilder.addItemType("Title");
-var Topic = schemaBuilder.addItemType("Topic");
-var Task = schemaBuilder.addItemType("Task");
+// var Title = schemaBuilder.addItemType("Title");
+// var Topic = schemaBuilder.addItemType("Topic");
+// var Task = schemaBuilder.addItemType("Task");
 
-var List = schemaBuilder.addItemType("List");
+// var List = schemaBuilder.addItemType("List");
 
-var Webpage = schemaBuilder.addItemType("Webpage");
+// var Webpage = schemaBuilder.addItemType("Webpage");
 
-var Note = schemaBuilder.addItemType("Note");
+// var Note = schemaBuilder.addItemType("Note");
 
-var Status = schemaBuilder.addItemType("Status");
+// var Status = schemaBuilder.addItemType("Status");
 
-var Book = schemaBuilder.addItemType("Book");
-var Movie = schemaBuilder.addItemType("Movie");
+// var Book = schemaBuilder.addItemType("Book");
+// var Movie = schemaBuilder.addItemType("Movie");
 
 // let title = addItem(Title.id, {});
 // addReference(
@@ -409,28 +515,28 @@ var Movie = schemaBuilder.addItemType("Movie");
 // let later = addItem(Status.id, {});
 // addReference(later.id, title.id);
 
-let harryPotter1 = os.add_item("Book");
-let title = os.add_item("Title");
-let text = os.add_item("Text");
-os.set_property(text, "value", `"Harry Potter"`);
-os.add_edge(title, text);
-os.add_edge(Movie, harryPotter1);
-os.add_edge(harryPotter1, title);
+// let harryPotter1 = os.add_item("Book");
+// let title = os.add_item("Title");
+// let text = os.add_item("Text");
+// os.set_property(text, "value", `"Harry Potter"`);
+// os.add_edge(title, text);
+// os.add_edge(Movie, harryPotter1);
+// os.add_edge(harryPotter1, title);
 
-let task = os.add_item("Task");
-let taskItem = os.add_item("Text");
-os.set_property(taskItem, "value", `"Harry Potter"`);
+// let task = os.add_item("Task");
+// let taskItem = os.add_item("Text");
+// os.set_property(taskItem, "value", `"Harry Potter"`);
 
-os.add_edge(task, taskItem);
-os.add_edge(title, text);
+// os.add_edge(task, taskItem);
+// os.add_edge(title, text);
 
-let taskList = os.add_item("List");
-title = os.add_item("Title");
-text = os.add_item("Text");
-os.set_property(text, "value", `"Harry Potter"`);
-os.add_edge(taskList, task);
-os.add_edge(title, text);
-os.add_edge(taskList, title);
+// let taskList = os.add_item("List");
+// title = os.add_item("Title");
+// text = os.add_item("Text");
+// os.set_property(text, "value", `"Harry Potter"`);
+// os.add_edge(taskList, task);
+// os.add_edge(title, text);
+// os.add_edge(taskList, title);
 
 const schema = schemaBuilder.toSchema();
 
