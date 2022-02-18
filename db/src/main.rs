@@ -1,6 +1,5 @@
 use indradb::*;
 use serde::{Deserialize, Serialize};
-use std::result::Result as StdResult;
 
 use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
@@ -74,7 +73,7 @@ impl OS {
         return os;
     }
 
-    pub fn add_vertex(&mut self) -> String {
+    fn add_vertex(&mut self) -> String {
         let vertex1 = &Vertex::new(indradb::Identifier::default());
         self.store
             .create_vertex(vertex1)
@@ -220,14 +219,14 @@ impl OS {
             .expect("Expected to be able to create a vertex");
     }
 
-    pub fn get_vertex_count(&mut self) -> u64 {
+    fn get_vertex_count(&mut self) -> u64 {
         return self
             .store
             .get_vertex_count()
             .expect("Expected to be able to get the vertex count");
     }
 
-    pub fn get_edge_count(&mut self, a: String) -> u64 {
+    fn get_edge_count(&mut self, a: String) -> u64 {
         return self
             .store
             .get_edge_count(
@@ -391,9 +390,7 @@ pub fn add(a: u32, b: u32) -> u32 {
     a + b
 }
 
-pub fn main() {
-
-}
+pub fn main() {}
 
 // pub fn main() -> wry::Result<()> {
 //     use wry::{
