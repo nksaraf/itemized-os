@@ -187,7 +187,7 @@ export let os: OS = {
       item.item_properties.map((pr) => [pr.name, pr.value])
     );
   },
-  setup: async () => {
+  async setup() {
     console.log(
       await supabase
         .from("item_properties")
@@ -255,7 +255,19 @@ export let os: OS = {
       },
     ]);
 
+    this.installServices(
+      systemService,
+      knowledgeService,
+      bookService,
+      movieService
+    );
+
     return true;
+  },
+  async installServices(...services: any) {
+    for (let service of services) {
+      await service(os);
+    }
   },
 };
 
@@ -371,6 +383,7 @@ const builder = (os: OS) => {
         type Mutation {
           addType(name: String): Type
           setup(name: String): Boolean
+          addItem(type: ItemType): Type
         }
       `;
       const schema = makeExecutableSchema({
@@ -378,6 +391,13 @@ const builder = (os: OS) => {
         resolvers: {
           Mutation: {
             addType: async (root: any, args: any) => {
+              let id = await os.add_type(args.name);
+              return {
+                id,
+                ...(await os.get_properties(id)),
+              };
+            },
+            addItem: async (root: any, args: any) => {
               let id = await os.add_type(args.name);
               return {
                 id,
@@ -477,23 +497,49 @@ const builder = (os: OS) => {
 
 let schemaBuilder = builder(os);
 
-// var Text = schemaBuilder.addItemType("Text", "value: String");
-// var Date = schemaBuilder.addItemType("Date");
+async function systemService(os: OS) {
+  await os.add_type("Text");
+  schemaBuilder.addItemType("Text", "value: String");
+  await os.add_type("Date");
+  schemaBuilder.addItemType("Date", "value: String");
+  await os.add_type("URL");
+  schemaBuilder.addItemType("URL", "value: String");
+}
 
-// var Title = schemaBuilder.addItemType("Title");
-// var Topic = schemaBuilder.addItemType("Topic");
-// var Task = schemaBuilder.addItemType("Task");
+async function knowledgeService(os: OS) {
+  await os.add_type("Title");
+  schemaBuilder.addItemType("Title");
+  await os.add_type("Topic");
+  schemaBuilder.addItemType("Topic");
+  await os.add_type("List");
+  schemaBuilder.addItemType("List");
+  await os.add_type("Note");
+  schemaBuilder.addItemType("Note");
+  await os.add_type("Status");
+  schemaBuilder.addItemType("Status");
+}
 
-// var List = schemaBuilder.addItemType("List");
+async function bookService(os: OS) {
+  await os.add_type("Book");
+  schemaBuilder.addItemType("Note");
+}
+
+async function movieService(os: OS) {
+  await os.add_type("Movie");
+  schemaBuilder.addItemType("Movie");
+}
+
+async function taskService(os: OS) {
+  await os.add_type("Task");
+  schemaBuilder.addItemType("Task");
+}
+
+async function webService(os: OS) {
+  await os.add_type("Webpage");
+  schemaBuilder.addItemType("Webpage");
+}
 
 // var Webpage = schemaBuilder.addItemType("Webpage");
-
-// var Note = schemaBuilder.addItemType("Note");
-
-// var Status = schemaBuilder.addItemType("Status");
-
-// var Book = schemaBuilder.addItemType("Book");
-// var Movie = schemaBuilder.addItemType("Movie");
 
 // let title = addItem(Title.id, {});
 // addReference(
