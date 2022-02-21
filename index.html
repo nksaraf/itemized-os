@@ -10,7 +10,14 @@
     <div id="app"></div>
     <script>
       window.global = window;
+      window.process = {
+        env: {
+          NODE_DEBUG: "",
+        },
+      };
     </script>
+    <script src="/node_modules/ipfs/index.min.js"></script>
+    <script src="/node_modules/orbit-db/dist/orbitdb.min.js"></script>
     <script type="module" src="/src/main.tsx"></script>
     <!-- Note the usage of `type=module` here as this is an ES6 module -->
     <!-- <script type="module">
